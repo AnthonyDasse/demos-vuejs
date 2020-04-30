@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+  labels:
+    app: webapp
+  name: webapp
+  namespace: default  
+spec: 
+  selector:
+    matchLabels:
+      app: webapp 
+  template:
+    metadata:      
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: monimage:tag
+        name: webapp
+        volumeMounts:
+        - name: config-volume
+          mountPath: app/static
+      imagePullSecrets:
+      - name: reg-innersource-psa
+      volumes:
+        - name: config-volume
+          configMap:
+            name: webapp-config
+  replicas: 1
